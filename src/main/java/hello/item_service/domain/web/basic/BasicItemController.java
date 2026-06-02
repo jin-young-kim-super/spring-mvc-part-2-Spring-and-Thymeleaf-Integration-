@@ -77,16 +77,14 @@ public class BasicItemController {
         return "redirect:/basic/items" + savedItem.getId(); //PRG
     }
 
-
     @PostMapping("/add")
     public String addItemV6(Item item, RedirectAttributes redirectAttributes) {
         Item savedItem = itemRepository.save(item);
-        redirectAttributes.addAttribute("itemId",savedItem.getId());
-        redirectAttributes.addAttribute("status",true);
+        redirectAttributes.addAttribute("itemId", savedItem.getId());
+        redirectAttributes.addAttribute("status", true);
         return "redirect:/basic/items/{itemId}"; // /basic/itesm/1?status=true
     }
-
-    //@GetMapping("/{itemId}/edit")
+    @GetMapping("/{itemId}/edit")
     public String editForm(@PathVariable Long itemId ,Model model) {
         Item findItem = itemRepository.findById(itemId);
         model.addAttribute("item",findItem);
@@ -94,10 +92,11 @@ public class BasicItemController {
     }
 
     @PostMapping("/{itemId}/edit")
-    public String edit(@PathVariable Long itemId ,@ModelAttribute Item item) {
+    public String edit(@PathVariable Long itemId, @ModelAttribute Item item) {
         itemRepository.update(itemId, item);
-        return "redirect:/baisc/items/{itemId}"; // PRG
+        return "redirect:/basic/items/{itemId}";
     }
+
     // 테스트용 데이터 생성
     @PostConstruct
     public void init() {
@@ -106,7 +105,4 @@ public class BasicItemController {
         itemRepository.save(itemA);
         itemRepository.save(itemB);
     }
-
-
-
 }
