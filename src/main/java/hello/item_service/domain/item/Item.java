@@ -1,18 +1,21 @@
 package hello.item_service.domain.item;
 
-
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-@Data // 지금은 학습용이니, 도메일 모델에 그냥 @Data를 사용하도록 하겠다.
-//@Getter @Setter
+import java.util.List;
+
+@Data
 public class Item {
+
     private Long id;
     private String itemName;
-    private Integer price;      // int를 사용하지 않은 이유 : price에 데이터가 없는 경우가 있어서 그걸 null로 표현하고 싶어서!
-                                // -> 물론 int를 사용해도 기본값을 0으로 표현해서 처리하는 방법도 있지만, price가 0이면 상품 가격이 무료라서 0인지 아니면 데이터가 아직 할당이 안돼서 0인지 판별이 안된다.
+    private Integer price;
     private Integer quantity;
+
+    private Boolean open; //판매 여부
+    private List<String> regions; //등록 지역
+    private ItemType itemType; //상품 종류
+    private String deliveryCode; //배송 방식
 
     public Item() {
     }
