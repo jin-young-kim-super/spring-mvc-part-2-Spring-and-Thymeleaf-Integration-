@@ -1,0 +1,21 @@
+질문 : return "redirect:/basic/items" + savedItem.getId()에서 URL 인코딩 문제가 일어날 수 있다는 말이 뭐임?
+
+
+답변 : 
+
+Spring MVC에서 redirect:는 구조화된 URL 빌더가 아니라 단순 문자열 URL로 처리됩니다.)
+
+So when you concatenate strings like "/basic/items" + savedItem.getId(), Spring does not automatically guarantee safe URL encoding.
+(그래서 "/basic/items" + savedItem.getId()처럼 문자열을 붙이면 Spring이 자동으로 안전한 URL 인코딩을 보장하지 않습니다.)
+
+URL encoding issues occur when the dynamic part contains characters that are not safe in URLs, such as spaces, ?, &, /, or non-ASCII characters.
+(URL 인코딩 문제는 동적 값에 공백, ?, &, /, 또는 비 ASCII 문자 같은 URL에서 안전하지 않은 문자가 포함될 때 발생합니다.)
+
+In your current case, savedItem.getId() is likely a numeric value, so practically it will not break.
+(지금 경우처럼 savedItem.getId()가 숫자라면 실제로 문제는 발생하지 않습니다.)
+
+However, the warning is about general safety and maintainability, not just this specific code.
+(하지만 이 경고는 현재 코드만이 아니라 일반적인 안전성과 유지보수성을 말하는 것입니다.)
+
+그래서 RedirectAttribute를 활용을 한다.
+-> 이러면 동적으로 할당되는 값을 안전하게 인코딩을 해준다
