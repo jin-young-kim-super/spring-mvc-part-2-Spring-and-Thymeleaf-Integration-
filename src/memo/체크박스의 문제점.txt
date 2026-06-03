@@ -1,0 +1,35 @@
+HTML의 체크박스는 예를 들어 <input type="checkbox" id="open" th:field="*{open}" class="form-check-input">
+이런 체크박스가 있다고 했을 때 유저가 체크를 하면 open=true로 값을 넘긴다. 
+그러나 문제점이 하나 있다. 유저가 체크박스에 체크를 하지 않으면 HTML은 open 변수 자체를 서버에 전달하지 않는다. 
+그래서 서버에서 item.getOpen()를 하게 되면 null이 입력이 되어 버린다.
+
+Item 수정 시에는 null이면 문제가 되는 경우가 있다. 
+예를 들어, 개발자가 null에 대비하여 코드를 작성한 경우에는 문제가 안 생기겠지만, Item::open은 데이터 타입이 Boolean이기에 true or false이다. 
+즉, if(open == true or false)로 코드를 작성돼 있어서 수정이 잘 반영이 안 되어 있는 경우가 생길 수가 있고, 또 개발자 입장에서는 체크가 안 됐을 때 false가 서버에 전달되기를
+원한다. 
+
+그래서 이 점을 보완하기 위하여 【스프링MVC】는 히든 필드를 사용하여 이 문제를 해결해 준다. 
+                <input type="checkbox" id="open" th:field="*{open}" class="form-check-input">
+                <input type="hidden" name="_open" value="on"> // 히든 필드 : 체크돼 있어도 안 돼 있어도 _open="on"이 전송된다.
+※ 반드시 _open 형식을 지켜줘야 한다. 
+
+
+스프링 MVC의 규칙
+1. 체크 시 
+-> open, _open 둘다 서버에 전송이 되면 open 변수 데이터를 서버에 전송
+2. 미체크 시
+-> _open만 서버에 전송이 되면, 체크박스 미체크로 판단하여 open 변수에 null이 아닌 false를 서버에 자동 변환 후 전송.(open=false를 반환)
+
+등록 시에는 문제가 안된다. 어차피 open 변수 자체가 전송이 안돼므로 매핑이 안된다. 고로 그냥 그 open 변수를 그대로 저장하면 된다.
+
+Q. 서버에 넘어온 값이 open="on"인데 왜 @ModelAttribute Item item의 open에는 true, false가 담길까?
+A. 이건 스프링 타입 컨버터의 역할이고 이건 뒤에서 설명한다.
+
+그런데 이 방식도 일일이 히든 태그를 넣어줘야 하는 번거로움이 있다. 
+이 문제를 스프링 MVC의 도움이 아닌 타임리프에서 지원하는 기능을 쓰면 위 체크박스 문제를 해결할 수가 있다. 
+
+
+
+
+
+  
